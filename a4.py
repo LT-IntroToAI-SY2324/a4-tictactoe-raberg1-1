@@ -26,6 +26,31 @@ class TTTBoard:
         self.board[pos] = player
         return True        
 
+    def has_won(self, player) -> bool:
+        """Check to see if the player has won"""
+        ps = [player] * 3
+        # Horizontal
+        if self.board[:3] == ps or self.board[3:6] == ps or self.board[6:] == ps:
+            return True
+        # Vertical
+        if self.board[::3] == ps or self.board[1::3] == ps or self.board[2::3] == ps:
+            return True
+        # Diagonal
+        if self.board[::4] == ps or self.board[2:7:2] == ps:
+            return True
+
+        return False
+
+    def game_over(self) -> bool:
+        """Check if the board is full or if either X or O has won"""
+        if "*" not in self.board or self.has_won("X") or self.has_won("O"):
+            return True
+
+        return False
+
+    def clear(self) -> None:
+        """Clear the board to reset game"""
+        self.board = ['*'] * 9
 
 
 def play_tic_tac_toe() -> None:
@@ -81,6 +106,7 @@ if __name__ == "__main__":
     brd.make_move("X", 8)
     brd.make_move("O", 7)
     brd.make_move("O", 8)
+    brd.make_move("X", 0)
     print(brd)
 
     assert brd.game_over() == False
@@ -89,17 +115,23 @@ if __name__ == "__main__":
     brd.make_move("O", 6)
     brd.make_move("X", 2)
 
+    print(brd)
+
     assert brd.has_won("X") == True
     assert brd.has_won("O") == False
     assert brd.game_over() == True
 
     brd.clear()
 
+    print(brd)
+
     assert brd.game_over() == False
 
     brd.make_move("O", 3)
     brd.make_move("O", 4)
     brd.make_move("O", 5)
+
+    print(brd)
 
     assert brd.has_won("X") == False
     assert brd.has_won("O") == True
@@ -108,4 +140,4 @@ if __name__ == "__main__":
     print("All tests passed!")
 
     # uncomment to play!
-    # play_tic_tac_toe()
+    play_tic_tac_toe()
